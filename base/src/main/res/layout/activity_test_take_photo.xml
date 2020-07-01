@@ -13,10 +13,18 @@
         android:text="take photo"
         tools:ignore="HardcodedText" />
 
+    <Button
+        android:id="@+id/fromAlbumBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="take photo"
+        tools:ignore="HardcodedText" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        tools:ignore="ContentDescription" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
