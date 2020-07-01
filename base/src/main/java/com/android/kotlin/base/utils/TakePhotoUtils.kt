@@ -40,10 +40,35 @@ fun Activity.gotoTakePhoto(takePhotoRequestCode: Int, cb: callback) {
     } else {
         Uri.fromFile(outputImageFile)
     }
-    val intent = Intent("android.media.action.IMAGE_CAPTURE")
-    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)//指定图片的输出地址
-    startActivityForResult(intent, takePhotoRequestCode)
+    //请注意，startActivityForResult() 方法受调用 resolveActivity()
+    // （返回可处理 Intent 的第一个 Activity 组件）的条件保护。执行此检查非常重要，
+    // 因为如果您使用任何应用都无法处理的 Intent 调用 startActivityForResult()，
+    // 您的应用就会崩溃。所以只要结果不是 Null，就可以放心使用 Intent。
+    Intent("android.media.action.IMAGE_CAPTURE").apply {
+        resolveActivity(packageManager)?.let {
+            putExtra(MediaStore.EXTRA_OUTPUT, imageUri)//指定图片的输出地址
+            startActivityForResult(this, takePhotoRequestCode)
+        }
+    }
     cb(outputImageFile, imageUri)
+}
+
+/**
+ * 去相册获取图片扩展函数
+ */
+fun Activity.gotoAlbum(fromAlbumRequestCode:Int){
+//    //打开文件选择器
+//    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+//    intent.addCategory(Intent.CATEGORY_OPENABLE)
+//    //指定只显示图片
+//    intent.type = "image/*"
+//    startActivityForResult(intent,fromAlbumRequestCode)
+    Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+        addCategory(Intent.CATEGORY_OPENABLE)
+        type = "image/*"
+        startActivityForResult(this,fromAlbumRequestCode)
+    }
+
 }
 
 object TakePhotoUtils {

@@ -10,14 +10,14 @@
         android:id="@+id/takePhotoBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="take photo"
+        android:text="goto take photo"
         tools:ignore="HardcodedText" />
 
     <Button
         android:id="@+id/fromAlbumBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="take photo"
+        android:text="goto Album"
         tools:ignore="HardcodedText" />
 
     <ImageView

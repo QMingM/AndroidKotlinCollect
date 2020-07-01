@@ -10,19 +10,21 @@ import androidx.appcompat.app.AppCompatActivity
 import com.android.kotlin.base.R
 import com.android.kotlin.base.permission.PermissionM
 import com.android.kotlin.base.utils.TakePhotoUtils.rotateIfRequired
+import com.android.kotlin.base.utils.gotoAlbum
 import com.android.kotlin.base.utils.gotoTakePhoto
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_test_take_photo.*
 import java.io.File
 
 class TestTakePhotoActivity : AppCompatActivity() {
 
     private val takePhotoRequestCode = 1
+    private val fromAlbumRequestCode = 2
     private lateinit var imageUri: Uri
     private lateinit var outputImageFile: File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_test_take_photo)
         takePhotoBtn.setOnClickListener {
             PermissionM.request(
                 this,
@@ -38,8 +40,11 @@ class TestTakePhotoActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this, "you denied $deniedList", Toast.LENGTH_SHORT).show()
                 }
-
             }
+        }
+
+        fromAlbumBtn.setOnClickListener {
+            gotoAlbum(fromAlbumRequestCode)
         }
     }
 
@@ -52,6 +57,16 @@ class TestTakePhotoActivity : AppCompatActivity() {
                     val bitmap =
                         BitmapFactory.decodeStream(contentResolver.openInputStream(imageUri))
                     imageView.setImageBitmap(rotateIfRequired(bitmap, outputImageFile))
+                }
+            }
+            fromAlbumRequestCode -> {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    data.data?.let { uri ->
+                        val bitmap = contentResolver.openFileDescriptor(uri, "r")?.use {
+                            BitmapFactory.decodeFileDescriptor(it.fileDescriptor)
+                        }
+                        imageView.setImageBitmap(bitmap)
+                    }
                 }
             }
         }
