@@ -1,6 +1,7 @@
 package com.android.kotlin.base.utils
 
 import android.app.Activity
+import android.content.ContentUris
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -56,7 +57,7 @@ fun Activity.gotoTakePhoto(takePhotoRequestCode: Int, cb: callback) {
 /**
  * 去相册获取图片扩展函数
  */
-fun Activity.gotoAlbum(fromAlbumRequestCode:Int){
+fun Activity.gotoAlbum(fromAlbumRequestCode: Int) {
 //    //打开文件选择器
 //    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
 //    intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -66,9 +67,8 @@ fun Activity.gotoAlbum(fromAlbumRequestCode:Int){
     Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
         addCategory(Intent.CATEGORY_OPENABLE)
         type = "image/*"
-        startActivityForResult(this,fromAlbumRequestCode)
+        startActivityForResult(this, fromAlbumRequestCode)
     }
-
 }
 
 object TakePhotoUtils {
@@ -93,4 +93,27 @@ object TakePhotoUtils {
         bitmap.recycle()
         return rotatedBitmap
     }
+}
+
+
+/**
+ * 适合所有Android系统版本
+ * 获取Android手机相册中的图片
+ */
+fun Activity.getAlbumAllPicture(): List<Uri> {
+    val cursor = contentResolver.query(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        null, null, null, "${MediaStore.MediaColumns.DATE_ADDED} desc"
+    )
+    var list = mutableListOf<Uri>()
+    if (cursor != null) {
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID))
+            val uri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
+            println("image uri is $uri")
+            list.add(uri)
+        }
+        cursor.close()
+    }
+    return list
 }

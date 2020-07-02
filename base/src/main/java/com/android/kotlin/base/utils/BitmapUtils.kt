@@ -1,10 +1,13 @@
 package com.android.kotlin.base.utils
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import kotlinx.coroutines.InternalCoroutinesApi
@@ -68,5 +71,14 @@ fun createBitmapSafely(
             createBitmapSafely(width, height, retryCount, config)
         }
         false -> null
+    }
+}
+
+/**
+ * 把Uri对象解析成bitmap
+ */
+fun uriToBitmap(context: Context, uri: Uri): Bitmap {
+    return context.contentResolver.openFileDescriptor(uri, "r").use {
+        BitmapFactory.decodeFileDescriptor(it?.fileDescriptor)
     }
 }

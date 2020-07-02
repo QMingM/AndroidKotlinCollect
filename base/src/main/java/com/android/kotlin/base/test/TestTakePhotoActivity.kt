@@ -1,10 +1,12 @@
 package com.android.kotlin.base.test
 
 import android.app.Activity
+import android.content.ContentUris
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.kotlin.base.R
@@ -12,6 +14,7 @@ import com.android.kotlin.base.permission.PermissionM
 import com.android.kotlin.base.utils.TakePhotoUtils.rotateIfRequired
 import com.android.kotlin.base.utils.gotoAlbum
 import com.android.kotlin.base.utils.gotoTakePhoto
+import com.android.kotlin.base.utils.uriToBitmap
 import kotlinx.android.synthetic.main.activity_test_take_photo.*
 import java.io.File
 
